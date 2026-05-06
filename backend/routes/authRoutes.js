@@ -4,8 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const user = require("../models/user");
-
+const User = require("../models/user");
 
 // REGISTER
 router.post("/register", async (req, res) => {
@@ -23,7 +22,7 @@ router.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    await User.create({
       username,
       email,
       password: hashedPassword,
@@ -68,7 +67,7 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id },
-      "secretkey"
+      process.env.JWT_SECRET
     );
 
     res.json({
