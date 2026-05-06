@@ -5,9 +5,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const connectDB = require("../db");
+
 
 // REGISTER
 router.post("/register", async (req, res) => {
+  await connectDB();
   try {
     const { username, email, password } = req.body;
 
@@ -42,6 +45,7 @@ router.post("/register", async (req, res) => {
 
 // LOGIN
 router.post("/login", async (req, res) => {
+  await connectDB();
   try {
     const { email, password } = req.body;
 
