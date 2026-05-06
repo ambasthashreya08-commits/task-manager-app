@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Trash2, LogOut } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
@@ -11,6 +11,9 @@ function Home() {
 
   const navigate = useNavigate();
 
+  // BACKEND URL
+  const API_URL = "https://task-manager-app-33k8.onrender.com/api/tasks";
+
   // FETCH TASKS
   useEffect(() => {
     fetchTasks();
@@ -18,7 +21,7 @@ function Home() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks");
+      const res = await axios.get(API_URL);
       setTasks(res.data);
     } catch (err) {
       console.log(err);
@@ -33,14 +36,11 @@ function Home() {
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/tasks",
-        {
-          title,
-          dueDate,
-          category,
-        }
-      );
+      const res = await axios.post(API_URL, {
+        title,
+        dueDate,
+        category,
+      });
 
       setTasks([...tasks, res.data]);
 
@@ -56,7 +56,7 @@ function Home() {
   // DELETE TASK
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${id}`);
+      await axios.delete(`${API_URL}/${id}`);
 
       setTasks(tasks.filter((task) => task._id !== id));
     } catch (err) {
@@ -74,6 +74,7 @@ function Home() {
     <div className="min-h-screen bg-black text-white flex justify-center px-4 py-10">
       <div className="w-full max-w-4xl">
 
+        {/* HEADER */}
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-6xl font-bold">My Tasks</h1>
 
@@ -85,6 +86,7 @@ function Home() {
           </button>
         </div>
 
+        {/* FORM */}
         <div className="space-y-5 mb-10">
 
           <input
@@ -120,6 +122,7 @@ function Home() {
           </button>
         </div>
 
+        {/* TASK LIST */}
         <div className="space-y-5">
           {tasks.length === 0 ? (
             <p className="text-center text-3xl text-gray-400">
