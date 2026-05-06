@@ -4,12 +4,11 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const User = require("../models/user");
+const User = require("../models/User");
 
 // REGISTER
 router.post("/register", async (req, res) => {
   try {
-
     const { username, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -33,7 +32,6 @@ router.post("/register", async (req, res) => {
     });
 
   } catch (error) {
-
     console.log(error);
 
     res.status(500).json({
@@ -42,11 +40,9 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
 // LOGIN
 router.post("/login", async (req, res) => {
   try {
-
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -70,12 +66,12 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    res.json({
+    res.status(200).json({
       token,
+      user,
     });
 
   } catch (error) {
-
     console.log(error);
 
     res.status(500).json({
